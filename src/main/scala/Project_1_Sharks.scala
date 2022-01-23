@@ -30,6 +30,7 @@ object Project_1_Sharks {
         var userPassword2 = ""
         var userAdmin = ""
         var adminPassword = ""
+        var adminPassword2 = ""
         var choice = ""
         var choice2 = ""
         var userMenu = ""
@@ -54,14 +55,16 @@ object Project_1_Sharks {
 
 
             // Welcome screen to the app
-            println("                                 *                                                        ")
-            println("                                * *                       *                               ")
-            println("                               *   *                     * *                              ")
-            println("                              *     *                   *   *                             ")
-            println("                                  ----------------------    -------------                 ")
-            println("                                                                                          ")
-            println("                                                                                          ")
-            println("                                                                                          ")
+            println("                                                                                                         ")
+            println("                                  *                                                                      ") 
+            println("                                *   *|                                                                   ")
+            println("                               *     *                                   *                               ")
+            println("                              *       *                                 * *                              ")
+            println("                             *         *                               *   *                             ")
+            println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~*~~~~~~~~~~~*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*~~~~~*~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+            println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+            println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+            println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
             println("")        
             println("")
 
@@ -88,8 +91,8 @@ object Project_1_Sharks {
                             adminLogIn()
                                 
                         }else if(( choice != 1 || choice != 2 || choice != 3 )){
-                            println(" Not a valid choice. Try again")
-                             //mainMenu()
+                            println("Not a valid choice. Try again")
+                            //mainMenu()
                         }
                                 
                     //val resultSet4 = statement.executeUpdate("UPDATE Players SET fairy = ('"++"') WHERE playerName = ('"++"') ;")    
@@ -112,13 +115,13 @@ object Project_1_Sharks {
                             userMenu()
 
                         }else if (userPassword != userPassword2){
-                            println(" Passwords do not match please try again")
-                            println("Please type your password")
+                            println(" Passwords do not match, please try again")
+                            println("Please type your password!!")
                             userPassword = (scanner.nextLine())
                             println("")
-                            println("Please type your retype password")
+                            println("Please type your retype password!!")
                             userPassword2 = (scanner.nextLine())
-                            println(" Account has been created")
+                            println(" Account has been created!!!")
                             userMenu()
                         }
                         //Updating table with userName and password after creating a new account
@@ -133,6 +136,7 @@ object Project_1_Sharks {
                         println("")
                         println(" Please type A Password")
                         userPassword = (scanner.nextLine())
+                        // query user name from database to match password
                         if (userPassword == userPassword2){
                             userMenu()
                             
@@ -140,10 +144,13 @@ object Project_1_Sharks {
                             println(" Incorrect password. Try again !!!")
                             userLogIn()
                         }
+
+                        //val resultSet5 = statement.executeUpdate("UPDATE Players SET babyDragon = ('"+babyDragon+"') WHERE playerName = ('"+playerName+"') ;")
+                        //log.write("Executing 'UPDATE Players SET babyDragon = ('"+babyDragon+"') WHERE playerName = ('"+playerName+"') ;\n")
                             
                     }    
-                        //val resultSet5 = statement.executeUpdate("UPDATE Players SET babyDragon = ('"+babyDragon+"') WHERE playerName = ('"+playerName+"') ;")
-                        //log.write("Executing 'UPDATE Players SET babyDragon = ('"+babyDragon+"') WHERE playerName = ('"+playerName+"') ;\n")  
+                          
+
                     def userMenu(){
                         println(" What type of data would you like to view. Please select below: ")
                         println("")
@@ -181,6 +188,7 @@ object Project_1_Sharks {
                             
                         }else if (( choice != 1 || choice != 2 || choice != 3 || choice != 4 || choice != 5|| choice != 6)) {
                             println(" Not a valid choice, please try again!!!")
+                            userMenu()
                             
                         }
                     }
@@ -196,40 +204,118 @@ object Project_1_Sharks {
                         userPassword = (scanner.nextLine())
                         println("")
                         //var query = "SELECT userPassword FROM persons Where userName = " + userName  +"; "
-                        if (userPassword == userPassword2){
+                        if (adminPassword == adminPassword2){
+                            // need to be able to match admin typed password with password saved in database
+                            //val is_user = statement.executeQuery(
+                            //"SELECT * FROM Sharks WHERE userName=" + "'" + userName + "' " + "AND userPassword=" + "'" + userPassword + "'" + ";"
                             println(" Log In Successful")
                             adminMenu()
-
-
                          
+                        }else if (adminPassword != adminPassword2){
+                            println("Wrong Password. please try again!!")
+                            adminLogIn()
+                        
                         }           
                     }
-                        // do not pet baby dragon
+                        // Admin menu options
                         def adminMenu(){
                             println("")
                             println(" Welcome Admin. Please choose from below: ")
-                            println("")
+                            println("################################")
                             println(" (1) Update dataset ")
                             println("")
                             println(" (2) Delete a User from the Database")
                             println("")
-                            println(" (3) Print all Users in database")
-                            println("")
+                            println(" (3) Exit the program")
+                            println("####################################")
                             var choice2 =  (scanner.nextInt())
                             (scanner.nextLine()) 
                             if (choice2 == 1){
-                                println(" choice 1")                            
+                                println(" choice 1")
+                                updateDataset()                            
                             
                             }else if (choice2 == 2) {
                                 println(" choice 2.")
+                                deleteUser()
                             
                             }else if (choice2 == 3) {
                                 println(" choice 3.")
+                                exitProgram()
                             
-                            }else if (( choice != 1 || choice != 2 || choice != 3 || choice != 4 || choice != 5|| choice != 6)) {
-                            println(" Not a valid choice, please try again!!!")
+                            }else if (( choice != 1 || choice != 2 || choice != 3)) {
+                                println(" Not a valid choice, please try again!!!")
+                                adminMenu()
                             
                             }
+                        }
+
+                        // Update the data for user options 
+                        def updateDataset(){
+                            println("")
+                            println(" This will update the data ")
+                            
+                            var choice2 =  (scanner.nextInt())
+                            (scanner.nextLine()) 
+                            if (choice2 == 1){
+                                println(" choice 1")
+                                updateDataset()                            
+                            
+                            }else if (choice2 == 2) {
+                                println(" choice 2.")
+                                deleteUser()
+                            
+                            }else if (choice2 == 3) {
+                                println(" choice 3.")
+                                exitProgram()
+                            
+                            }else if (( choice != 1 || choice != 2 || choice != 3)) {
+                                println(" Not a valid choice, please try again!!!")
+                                adminMenu()
+                            
+                            }
+                        }
+
+
+                        // Delete User from data base
+                        def deleteUser(){
+                            println("")
+                            println(" this will delete the selected user")
+                            println("################################")
+                            println(" (1) Update dataset ")
+                            println("")
+                            println(" (2) Delete a User from the Database")
+                            println("")
+                            println(" (3) Exit the program")
+                            println("####################################")
+                            var choice2 =  (scanner.nextInt())
+                            (scanner.nextLine()) 
+                            if (choice2 == 1){
+                                println(" choice 1")
+                                updateDataset()                            
+                            
+                            }else if (choice2 == 2) {
+                                println(" choice 2.")
+                                deleteUser()
+                            
+                            }else if (choice2 == 3) {
+                                println(" choice 3.")
+                                exitProgram()
+                            
+                            }else if (( choice != 1 || choice != 2 || choice != 3)) {
+                                println(" Not a valid choice, please try again!!!")
+                                adminMenu()
+                            
+                            }
+                        }
+
+
+                        // Exit program
+                        def exitProgram(){
+                            println("")
+                            println(" Thank you for visiting ")
+                            println(" Do stay safe in our Oceans")
+                            shark = false
+                            
                         }
 
 
@@ -238,8 +324,8 @@ object Project_1_Sharks {
             
 
             
-            val resultSet1 = statement.executeQuery("SELECT * FROM Players")
-            log.write("Executing 'SELECT * FROM Players' ;\n")
+            val resultSet1 = statement.executeQuery("SELECT * FROM Sharks")
+            log.write("Executing 'SELECT * FROM Sharks' ;\n")
             while ( resultSet1.next() ) {
                 print(resultSet1.getString(1) + " " + resultSet1.getString(2) + " " + resultSet1.getString(3) + " " + resultSet1.getString(4) + " " + resultSet1.getString(5) + " " + resultSet1.getString(6) + " " + resultSet1.getString(7))
                 println("")
@@ -252,10 +338,10 @@ object Project_1_Sharks {
             println(" Next query will delete all players game who's age is less than 4")
             println("")
             // this is for the total number of people who ended the game with health above 2
-            val resultSet8 =  statement.executeUpdate("DELETE FROM Players WHERE age < 4 ;")
-            log.write("Executing 'DELETE FROM Players WHERE age < 2' \n")
-            val resultSet9 = statement.executeQuery("SELECT * FROM Players")
-            log.write("Executing  'SELECT * FROM Players' ;\n")
+            //val resultSet8 =  statement.executeUpdate("DELETE FROM Players WHERE age < 4 ;")
+            //log.write("Executing 'DELETE FROM Players WHERE age < 2' \n")
+            val resultSet9 = statement.executeQuery("SELECT * FROM Sharks")
+            log.write("Executing  'SELECT * FROM Sharks' ;\n")
             while ( resultSet9.next() ) {
                  print(resultSet9.getString(1) + " " + resultSet9.getString(2) + " " + resultSet9.getString(3) + " " + resultSet9.getString(4) + " " + resultSet9.getString(5) + " " + resultSet9.getString(6) + " " + resultSet9.getString(7))
                  println("")
