@@ -57,7 +57,7 @@ object Project_1_Sharks {
             // Welcome screen to the app
             println("                                                                                                         ")
             println("                                  *                                                                      ") 
-            println("                                *   *|                                                                   ")
+            println("                                *   *                                                                    ")
             println("                               *     *                                   *                               ")
             println("                              *       *                                 * *                              ")
             println("                             *         *                               *   *                             ")
@@ -137,6 +137,8 @@ object Project_1_Sharks {
                         println(" Please type A Password")
                         userPassword = (scanner.nextLine())
                         // query user name from database to match password
+                        //val resultSet2 = statement.executeQuery(SELECT (username) FROM Sharks WHERE userPassword = userPassword2;
+                        //log.write("Executing 'SELECT (username) FROM Sharks WHERE userPassword = userPassword2';")
                         if (userPassword == userPassword2){
                             userMenu()
                             
@@ -145,9 +147,7 @@ object Project_1_Sharks {
                             userLogIn()
                         }
 
-                        //val resultSet5 = statement.executeUpdate("UPDATE Players SET babyDragon = ('"+babyDragon+"') WHERE playerName = ('"+playerName+"') ;")
-                        //log.write("Executing 'UPDATE Players SET babyDragon = ('"+babyDragon+"') WHERE playerName = ('"+playerName+"') ;\n")
-                            
+                                                    
                     }    
                           
 
@@ -335,7 +335,7 @@ object Project_1_Sharks {
 
             // Query to delete database entry where play age is less then 5
             println("")
-            println(" Next query will delete all players game who's age is less than 4")
+            println("")
             println("")
             // this is for the total number of people who ended the game with health above 2
             //val resultSet8 =  statement.executeUpdate("DELETE FROM Players WHERE age < 4 ;")
