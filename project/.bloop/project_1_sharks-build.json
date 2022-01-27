@@ -200,7 +200,7 @@
         "platform": {
             "name": "jvm",
             "config": {
-                "home": "C:\\Program Files\\Java\\jdk-16.0.1",
+                "home": "C:\\Program Files\\Java\\jdk1.8.0_321\\jre",
                 "options": [
                     "-Duser.dir=C:\\Users\\Cybineer\\Desktop\\Project_1_Sharks\\project"
                 ]

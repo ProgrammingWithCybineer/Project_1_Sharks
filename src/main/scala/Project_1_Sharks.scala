@@ -1,3 +1,9 @@
+import org.apache.spark.sql.hive.HiveContext
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkContext._
+import org.apache.spark.sql.SQLContext
+
 import java.util.Scanner
 import java.sql.DriverManager
 import java.sql.Connection
@@ -7,6 +13,7 @@ import java.io.PrintWriter
 
 
 
+//?for ";" in hive '\u0059'
 
 
 
@@ -18,13 +25,7 @@ object Project_1_Sharks {
          // declaring all variables needed for program
         var scanner = new Scanner(System.in)
         val log = new PrintWriter(new File("Sharks.log"))
-        val driver = "com.mysql.jdbc.Driver"
-        // Modify for whatever port you are running your DB on
-        val url = "jdbc:mysql://localhost:3306/Project_1_Sharks"
-        val username = "root"
-        //? DON'T FORGET TO DELETE PASSWORD BEFORE PUSHING TO GITHUB
-        val password = "ProgramWithNoFears920" // Update to include your password
-        var connection:Connection = null 
+        
         var userName = ""
         var userPassword = ""
         var userPassword2 = ""
@@ -37,6 +38,33 @@ object Project_1_Sharks {
         var shark = true
         
         
+
+
+        // This block of code is need to connect to spark/hive/hadoop
+        System.setSecurityManager(null)
+        System.setProperty("hadoop.home.dir", "C:\\hadoop\\")
+        val conf = new SparkConf()
+            .setMaster("local")
+            .setAppName("Project_1_Sharks")
+        val sc = new SparkContext(conf)
+        sc.setLogLevel("ERROR")
+        val hiveCtx = new HiveContext(sc)
+        import hiveCtx.implicits._
+
+
+        // make the connection to mySQL
+        val driver = "com.mysql.jdbc.Driver"
+        // Modify for whatever port you are running your DB on
+        val url = "jdbc:mysql://localhost:3306/Project_1_Sharks"
+        val username = "root"
+        //? DON'T FORGET TO DELETE PASSWORD BEFORE PUSHING TO GITHUB
+        val password = "#################" // Update to include your password
+        var connection:Connection = null 
+        //val statement = connection.createStatement()
+        
+        
+        
+        
         
 
 
@@ -45,13 +73,10 @@ object Project_1_Sharks {
 
          
         try{
-            
             // make the connection
             Class.forName(driver)
             connection = DriverManager.getConnection(url, username, password)  
-            //val statement = connection.createStatement()
-
-            val statement = connection.createStatement()  
+            val statement = connection.createStatement() 
 
 
             // Welcome screen to the app
@@ -63,6 +88,7 @@ object Project_1_Sharks {
             println("                             *         *                               *   *                             ")
             println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~*~~~~~~~~~~~*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*~~~~~*~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
             println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+            println("                                      WELCOME TO THE SHARK ATTACK DATABASE                               ")
             println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
             println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
             println("")        
@@ -72,11 +98,17 @@ object Project_1_Sharks {
                   
                 // Application loop
                 while (shark){
+                    
+
+                    
                     //def mainMenu(){
+                    println("###################################")
                     println("Please choose from the menu below: ")
                     println("(1) Create Account ")
                     println("(2) User Log In ")
                     println("(3) Admin Log In ")
+                    println("(0) Quit Program")
+                    println("###################################")
                     var choice= (scanner.nextInt())
                     scanner.nextLine()
                     //}  
@@ -89,15 +121,15 @@ object Project_1_Sharks {
 
                         }else if(choice == 3){
                             adminLogIn()
+
+                        }else if(choice == 0){
+                            exitProgram()
                                 
-                        }else if(( choice != 1 || choice != 2 || choice != 3 )){
+                        }else if(( choice != 0 || choice != 1|| choice != 1 || choice != 2 || choice != 3 )){
                             println("Not a valid choice. Try again")
                             //mainMenu()
                         }
                                 
-                    //val resultSet4 = statement.executeUpdate("UPDATE Players SET fairy = ('"++"') WHERE playerName = ('"++"') ;")    
-                    //log.write("Executing 'UPDATE Players SET fairy = ('"++"') WHERE playerName = ('"++"') ;\n") 
-                    // Requesting User Input
                     
                         
                     // Create User Account    
@@ -112,41 +144,58 @@ object Project_1_Sharks {
                         userPassword2 = (scanner.nextLine())
                         if (userPassword == userPassword2){
                             println(" Account has been created")
+                            println("")
                             userMenu()
 
                         }else if (userPassword != userPassword2){
                             println(" Passwords do not match, please try again")
+                            println("")
                             println("Please type your password!!")
                             userPassword = (scanner.nextLine())
                             println("")
                             println("Please type your retype password!!")
                             userPassword2 = (scanner.nextLine())
                             println(" Account has been created!!!")
+                            println("")
+                            userMenu()
+
+                        }else if (userPassword == null){
+                            println(" Password Cannot Be Blank")
+                            println("")
+                            println("Please type your password!!")
+                            userPassword = (scanner.nextLine())
+                            println("")
+                            println("Please type your retype password!!")
+                            userPassword2 = (scanner.nextLine())
+                            println(" Account has been created!!!")
+                            println("")
                             userMenu()
                         }
                         //Updating table with userName and password after creating a new account
                         val resultSet2 = statement.executeUpdate("INSERT INTO Sharks (userName, userPassword, userPassword2) VALUES ('"+userName+"', '"+userPassword+"',  '"+userPassword2+"');")
                         log.write("Executing 'INSERT INTO Sharks (userName, userPassword, userPassword2) VALUES ('"+userName+"', '"+userPassword+"',  '"+userPassword2+"');\n")
 
-                    }    
+                    } 
+
                     //User logging in
                     def userLogIn(){
                         println(" Please type a User Name")
-                        userName = (scanner.nextLine())
+                        userName = scanner.nextLine().trim()
                         println("")
                         println(" Please type A Password")
-                        userPassword = (scanner.nextLine())
-                        // query user name from database to match password
-                        //val resultSet2 = statement.executeQuery(SELECT (username) FROM Sharks WHERE userPassword = userPassword2;
-                        //log.write("Executing 'SELECT (username) FROM Sharks WHERE userPassword = userPassword2';")
-                        if (userPassword == userPassword2){
-                            userMenu()
-                            
-                        }else if (userPassword != userPassword2){
-                            println(" Incorrect password. Try again !!!")
-                            userLogIn()
+                        userPassword = scanner.nextLine().trim()
+                        val resultSet = statement.executeQuery("SELECT COUNT(*) FROM userAccount WHERE userName='"+userName+"' AND userPassword='"+userPassword+"';")
+                        while ( resultSet.next() ) {
+                            if (resultSet.getString(1) == "1") {
+                                println("You Have Logged In Successful")
+                                userMenu()
+                            }else{
+                                println("Username/password combo not found. Try again!")
+                                userLogIn()
+                                                    
+                            }
                         }
-
+                        
                                                     
                     }    
                           
@@ -166,10 +215,14 @@ object Project_1_Sharks {
                         println("")
                         println(" (6) What is the age range of the sharks that cause the most shark attacks?")
                         println("")
+                        println(" (0) To exit the program")
+                        println("")
                         var choice2 =  (scanner.nextInt())
                         (scanner.nextLine()) 
                         if (choice2 == 1){
-                            println(" choice 1")                            
+                            println(" Where do the most shark attacks happen?")
+                            mostSharkAttacks()
+
                             
                         }else if (choice2 == 2) {
                             println(" choice 2.")
@@ -185,8 +238,11 @@ object Project_1_Sharks {
                             
                         }else if (choice2 == 6) {
                             println(" choice 6.")
+
+                        }else if (choice2 == 0) {
+                            exitProgram()
                             
-                        }else if (( choice != 1 || choice != 2 || choice != 3 || choice != 4 || choice != 5|| choice != 6)) {
+                        }else if (( choice != 0 || choice != 1 || choice != 2 || choice != 3 || choice != 4 || choice != 5|| choice != 6)) {
                             println(" Not a valid choice, please try again!!!")
                             userMenu()
                             
@@ -195,128 +251,169 @@ object Project_1_Sharks {
 
                     
                     
-                    // do not pet fairy
+                    // logging in as Admin
                     def adminLogIn(){
+                        val statement2 = connection.createStatement()
                         println("Type Admin UserName")
-                        userName = (scanner.nextLine())
+                        userName = scanner.nextLine().trim()
                         println("")
                         println("Type Admin Password")
-                        userPassword = (scanner.nextLine())
-                        println("")
-                        //var query = "SELECT userPassword FROM persons Where userName = " + userName  +"; "
-                        if (adminPassword == adminPassword2){
-                            // need to be able to match admin typed password with password saved in database
-                            //val is_user = statement.executeQuery(
-                            //"SELECT * FROM Sharks WHERE userName=" + "'" + userName + "' " + "AND userPassword=" + "'" + userPassword + "'" + ";"
-                            println(" Log In Successful")
-                            adminMenu()
-                         
-                        }else if (adminPassword != adminPassword2){
-                            println("Wrong Password. please try again!!")
-                            adminLogIn()
-                        
-                        }           
+                        userPassword = scanner.nextLine().trim()
+                        println("")     
+                        val resultSet2 = statement2.executeQuery("SELECT COUNT(*) FROM adminAccount WHERE userAdmin='"+userAdmin+"' AND adminPassword='"+adminPassword+"';")
+                        while ( resultSet2.next() ) {
+                            if (resultSet2.getString(1) == "1") {
+                                println(" Log In Successful!!")
+                                adminMenu()
+                            }else{
+                                println("Username/password combo not found. Try again!")
+                                println("")
+                                adminLogIn()
+                                                    
+                            }           
+                        }
                     }
                         // Admin menu options
-                        def adminMenu(){
-                            println("")
-                            println(" Welcome Admin. Please choose from below: ")
-                            println("################################")
-                            println(" (1) Update dataset ")
-                            println("")
-                            println(" (2) Delete a User from the Database")
-                            println("")
-                            println(" (3) Exit the program")
-                            println("####################################")
-                            var choice2 =  (scanner.nextInt())
-                            (scanner.nextLine()) 
-                            if (choice2 == 1){
-                                println(" choice 1")
-                                updateDataset()                            
-                            
-                            }else if (choice2 == 2) {
-                                println(" choice 2.")
-                                deleteUser()
-                            
-                            }else if (choice2 == 3) {
-                                println(" choice 3.")
-                                exitProgram()
-                            
-                            }else if (( choice != 1 || choice != 2 || choice != 3)) {
-                                println(" Not a valid choice, please try again!!!")
-                                adminMenu()
-                            
-                            }
+                    def adminMenu(){
+                        println("")
+                        println(" Welcome Admin. Please choose from below: ")
+                        println("################################")
+                        println(" (1) Update dataset ")
+                        println("")
+                        println(" (2) Delete a User from the Database")
+                        println("")
+                        println(" (3) Exit the program")
+                        println("####################################")
+                        var choice2 =  (scanner.nextInt())
+                        (scanner.nextLine()) 
+                        if (choice2 == 1){
+                            println(" choice 1")
+                            updateDataset()                            
+                        
+                        }else if (choice2 == 2) {
+                            println(" choice 2.")
+                            deleteUser()
+                        
+                        }else if (choice2 == 3) {
+                            println(" choice 3.")
+                            exitProgram()
+                        
+                        }else if (( choice != 1 || choice != 2 || choice != 3)) {
+                            println(" Not a valid choice, please try again!!!")
+                            adminMenu()
+                        
                         }
+                    }
 
-                        // Update the data for user options 
-                        def updateDataset(){
-                            println("")
-                            println(" This will update the data ")
-                            
-                            var choice2 =  (scanner.nextInt())
-                            (scanner.nextLine()) 
-                            if (choice2 == 1){
-                                println(" choice 1")
-                                updateDataset()                            
-                            
-                            }else if (choice2 == 2) {
-                                println(" choice 2.")
-                                deleteUser()
-                            
-                            }else if (choice2 == 3) {
-                                println(" choice 3.")
-                                exitProgram()
-                            
-                            }else if (( choice != 1 || choice != 2 || choice != 3)) {
-                                println(" Not a valid choice, please try again!!!")
-                                adminMenu()
-                            
-                            }
+                    // Update the data for user options 
+                    def updateDataset(){
+                        println("")
+                        println(" This will update the data ")
+                        
+                        var choice2 =  (scanner.nextInt())
+                        (scanner.nextLine()) 
+                        if (choice2 == 1){
+                            println(" choice 1")
+                            updateDataset()                            
+                        
+                        }else if (choice2 == 2) {
+                            println(" choice 2.")
+                            deleteUser()
+                        
+                        }else if (choice2 == 3) {
+                            println(" choice 3.")
+                            exitProgram()
+                        
+                        }else if (( choice != 1 || choice != 2 || choice != 3)) {
+                            println(" Not a valid choice, please try again!!!")
+                            adminMenu()
+                        
                         }
+                    }
 
 
-                        // Delete User from data base
-                        def deleteUser(){
-                            println("")
-                            println(" this will delete the selected user")
-                            println("################################")
-                            println(" (1) Update dataset ")
-                            println("")
-                            println(" (2) Delete a User from the Database")
-                            println("")
-                            println(" (3) Exit the program")
-                            println("####################################")
-                            var choice2 =  (scanner.nextInt())
-                            (scanner.nextLine()) 
-                            if (choice2 == 1){
-                                println(" choice 1")
-                                updateDataset()                            
-                            
-                            }else if (choice2 == 2) {
-                                println(" choice 2.")
-                                deleteUser()
-                            
-                            }else if (choice2 == 3) {
-                                println(" choice 3.")
-                                exitProgram()
-                            
-                            }else if (( choice != 1 || choice != 2 || choice != 3)) {
-                                println(" Not a valid choice, please try again!!!")
-                                adminMenu()
-                            
-                            }
+                    // Delete User from data base
+                    def deleteUser(){
+                        println("")
+                        println(" this will delete the selected user")
+                        println("################################")
+                        println(" (1) Update dataset ")
+                        println("")
+                        println(" (2) Delete a User from the Database")
+                        println("")
+                        println(" (3) Exit the program")
+                        println("####################################")
+                        var choice2 =  (scanner.nextInt())
+                        (scanner.nextLine()) 
+                        if (choice2 == 1){
+                            println(" choice 1")
+                            updateDataset()                            
+                        
+                        }else if (choice2 == 2) {
+                            println(" choice 2.")
+                            deleteUser()
+                        
+                        }else if (choice2 == 3) {
+                            println(" choice 3.")
+                            exitProgram()
+                        
+                        }else if (( choice != 1 || choice != 2 || choice != 3)) {
+                            println(" Not a valid choice, please try again!!!")
+                            adminMenu()
+                        
                         }
+                    }
 
 
-                        // Exit program
-                        def exitProgram(){
-                            println("")
-                            println(" Thank you for visiting ")
-                            println(" Do stay safe in our Oceans")
-                            shark = false
-                            
-                        }
+                    // Exit program
+                    def exitProgram(){
+                        println("")
+                        println("                                                                                                         ")
+                        println("                                  *                                                                      ") 
+                        println("                                *   *                                                                    ")
+                        println("                               *     *                                   *                               ")
+                        println("                              *       *                                 * *                              ")
+                        println("                             *         *                               *   *                             ")
+                        println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~*~~~~~~~~~~~*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*~~~~~*~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                        println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                        println("                             THANK YOU FOR VISITING THE SHARK ATTACK DATABASE                            ")
+                        println("                                       DO STAY SAFE IN OUR OCEANS                                        ")
+                        println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                        println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                        println("")        
+                        println("")
+                        println("")
+                        shark = false
+                        
+                    }
+
+                    def sharkAttackData(){
+                        val output = hiveCtx.read
+                            .format("csv")
+                            .option("inferSchema", "true")
+                            .option("header", "true")
+                            .load("input/global-shark-attack.csv")
+                        output.limit(25).show() // will print out the first 25 lines
+
+
+                        // This code will create a temp view of the dataset you used and load the data into a permanent table
+                        // inside of Hadoop. this will persist the data and only require this code to run once.
+                        // After initialization this code will and creation of output will not me necessary
+                        output.createOrReplaceTempView("temp_data")
+                        hiveCtx.sql("CREATE TABLE IF NOT EXISTS shark1 (caseNumber INT, date INT, year INT, type STRING, country STRING, area STRING, location STRING, activity STRING, name STRING, sex STRING, age INT, injury STRING, fatal STRING, time INT, species STRING, investigator or source STRING, pdf STRING, href formula STRING, href STRING, case number INT, case number INT, original order INT)")
+                        hiveCtx.sql("INSERT INTO shark1 SELECT * FROM temp_data")
+
+
+                        //?Copy line 400 and put here for partitioning
+                    }
+
+
+
+
+                       def mostSharkAttacks(){
+                           println("most attacks")
+                       //val mostAttacks = hiveCtx.sql("") 
+                    }
 
 
                             
