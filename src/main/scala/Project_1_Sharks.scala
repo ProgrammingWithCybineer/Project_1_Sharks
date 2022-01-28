@@ -15,6 +15,10 @@ import java.io.PrintWriter
 
 //?for ";" in hive '\u0059'
 
+//? SHIFT + ALT + F => to auto format
+
+//? sc.nextLine().trim.toInt
+
 
 
 
@@ -400,11 +404,13 @@ object Project_1_Sharks {
                         // inside of Hadoop. this will persist the data and only require this code to run once.
                         // After initialization this code will and creation of output will not me necessary
                         output.createOrReplaceTempView("temp_data")
-                        hiveCtx.sql("CREATE TABLE IF NOT EXISTS shark1 (caseNumber INT, date INT, year INT, type STRING, country STRING, area STRING, location STRING, activity STRING, name STRING, sex STRING, age INT, injury STRING, fatal STRING, time INT, species STRING, investigator or source STRING, pdf STRING, href formula STRING, href STRING, case number INT, case number INT, original order INT)")
+                        hiveCtx.sql("CREATE TABLE IF NOT EXISTS shark1 (caseNumber STRING, date STRING, year STRING, type STRING, country STRING, area STRING, location STRING, activity STRING, name STRING, sex STRING, age INT, injury STRING, fatal STRING, time STRING, species STRING, investigator_or_source STRING, pdf STRING, href_formula STRING, href_STRING, case_number1 STRING, case_number STRING, original_order INT)")
                         hiveCtx.sql("INSERT INTO shark1 SELECT * FROM temp_data")
 
 
                         //?Copy line 400 and put here for partitioning
+                        //?INSERT INTO new_table SELECT cast(old_string_col AS DATE) FROM old_table got column that contain date
+
                     }
 
 
