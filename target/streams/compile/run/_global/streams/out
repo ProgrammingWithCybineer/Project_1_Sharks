@@ -1,5 +1,5 @@
 [0m[[0m[31merror[0m] [0m[0mjava.lang.NullPointerException[0m
-[0m[[0m[31merror[0m] [0m[0m	at Project_1_Sharks$.main(Project_1_Sharks.scala:67)[0m
+[0m[[0m[31merror[0m] [0m[0m	at Project_1_Sharks$.main(Project_1_Sharks.scala:486)[0m
 [0m[[0m[31merror[0m] [0m[0m	at Project_1_Sharks.main(Project_1_Sharks.scala)[0m
 [0m[[0m[31merror[0m] [0m[0m	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)[0m
 [0m[[0m[31merror[0m] [0m[0m	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)[0m

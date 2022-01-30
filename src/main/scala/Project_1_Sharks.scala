@@ -62,7 +62,7 @@ object Project_1_Sharks {
         val url = "jdbc:mysql://localhost:3306/Project_1_Sharks"
         val username = "root"
         //? DON'T FORGET TO DELETE PASSWORD BEFORE PUSHING TO GITHUB
-        val password = "########" // Update to include your password
+        val password = "#####################" // Update to include your password
         var connection:Connection = null 
         //val statement = connection.createStatement()
         
@@ -189,10 +189,13 @@ object Project_1_Sharks {
                         println(" Please type A Password")
                         userPassword = scanner.nextLine().trim()
                         val resultSet = statement.executeQuery("SELECT COUNT(*) FROM userAccount WHERE userName='"+userName+"' AND userPassword='"+userPassword+"';")
+                        log.write("Executing 'SELECT COUNT(*) FROM userAccount WHERE userName='"+userName+"' AND userPassword='"+userPassword+"');\n")
                         while ( resultSet.next() ) {
                             if (resultSet.getString(1) == "1") {
                                 println("You Have Logged In Successful")
+                                sharkAttackData()
                                 userMenu()
+                                
                             }else{
                                 println("Username/password combo not found. Try again!")
                                 userLogIn()
@@ -205,6 +208,7 @@ object Project_1_Sharks {
                           
 
                     def userMenu(){
+                        
                         println(" What type of data would you like to view. Please select below: ")
                         println("")
                         println(" (1) What is the total number of shark attacks recorded?")
@@ -225,28 +229,35 @@ object Project_1_Sharks {
                         (scanner.nextLine()) 
                         if (choice2 == 1){
                             println(" What is the total number of shark attacks recorded?")
-                            totalSharkAttacks()
+                            //totalSharkAttacks()
+                            userMenu()
 
                             
                         }else if (choice2 == 2) {
                             println(" What shark is responsible for the most shark attacks?")
                             sharkResponsible()
+                            userMenu()
                             
                         }else if (choice2 == 3) {
                             println(" Where do the most shark attacks happen?")
                             locationMostSharkAttacks()
+                            userMenu()
                             
                         }else if (choice2 == 4) {
                             println(" What time of day do most shark attacks happen?")
                             timeOfDaySharkAttack()
+                            userMenu()
                             
                         }else if (choice2 == 5) {
                             println(" Are most shark attacks provoked or unprovoked?")
                             provokedUnprovokedAttacks()
+                            userMenu()
                             
                         }else if (choice2 == 6) {
                             println(" What is the age range of people attacked by sharks?")
                             ageRangePeopleAttacked()
+                            userMenu()
+                        
 
                         }else if (choice2 == 0) {
                             exitProgram()
@@ -262,14 +273,15 @@ object Project_1_Sharks {
                     
                     // logging in as Admin
                     def adminLogIn(){
-                        val statement2 = connection.createStatement()
+                        //val statement2 = connection.createStatement()
                         println("Type Admin UserName")
-                        userName = scanner.nextLine().trim()
+                        userAdmin = scanner.nextLine().trim()
                         println("")
                         println("Type Admin Password")
-                        userPassword = scanner.nextLine().trim()
+                        adminPassword = scanner.nextLine().trim()
                         println("")     
-                        val resultSet2 = statement2.executeQuery("SELECT COUNT(*) FROM adminAccount WHERE userAdmin='"+userAdmin+"' AND adminPassword='"+adminPassword+"';")
+                        val resultSet2 = statement.executeQuery("SELECT COUNT(*) FROM adminAccount WHERE userAdmin='"+userAdmin+"' AND adminPassword='"+adminPassword+"';")
+                        log.write("Executing 'SELECT COUNT(*) FROM adminAccount WHERE userAdmin='"+userAdmin+"' AND adminPassword='"+adminPassword+"');\n")
                         while ( resultSet2.next() ) {
                             if (resultSet2.getString(1) == "1") {
                                 println(" Log In Successful!!")
@@ -282,7 +294,8 @@ object Project_1_Sharks {
                             }           
                         }
                     }
-                        // Admin menu options
+
+                    // Admin menu options
                     def adminMenu(){
                         println("")
                         println(" Welcome Admin. Please choose from below: ")
@@ -317,23 +330,25 @@ object Project_1_Sharks {
                     // Update the data for user options 
                     def updateDataset(){
                         println("")
-                        println(" This will update the data ")
+                        println(" Please choose from below ")
+                        println(" (1) Update Data")
+                        println(" (2) Return to Admin Menu ")
+                        println(" (3) Exit program ")
                         
                         var choice2 =  (scanner.nextInt())
                         (scanner.nextLine()) 
                         if (choice2 == 1){
-                            println(" choice 1")
-                            updateDataset()                            
+                            println(" Updating Data on file ....")
+                            sharkAttackData()                          
                         
                         }else if (choice2 == 2) {
-                            println(" choice 2.")
-                            deleteUser()
+                            adminMenu()
                         
                         }else if (choice2 == 3) {
-                            println(" choice 3.")
+                            println("Exiting Program.....")
                             exitProgram()
-                        
-                        }else if (( choice != 1 || choice != 2 || choice != 3)) {
+
+                        }else if (( choice != 1 || choice != 2 || choice !=3 )) {
                             println(" Not a valid choice, please try again!!!")
                             adminMenu()
                         
@@ -341,34 +356,37 @@ object Project_1_Sharks {
                     }
 
 
-                    // Delete User from data base
+                    // DELETE USER FUNCTION WORKING AS OF 1/30/22
                     def deleteUser(){
                         println("")
-                        println(" this will delete the selected user")
                         println("################################")
-                        println(" (1) Update dataset ")
+                        println(" (1) Choose A User To Delete ")
                         println("")
-                        println(" (2) Delete a User from the Database")
+                        println(" (2) Exit the program")
                         println("")
-                        println(" (3) Exit the program")
-                        println("####################################")
+                        println("#################################")
                         var choice2 =  (scanner.nextInt())
                         (scanner.nextLine()) 
                         if (choice2 == 1){
-                            println(" choice 1")
-                            updateDataset()                            
-                        
+                            val resultSet4 = statement.executeQuery("SELECT * FROM userAccount")
+                            log.write("Executing 'SELECT * FROM userAccount';\n")
+                            println(" Type A User's Name")
+                            userName =  scanner.nextLine().trim()
+                            val resultSet3 =  statement.executeUpdate("DELETE FROM userAccount WHERE userName = ('"+userName+"');")
+                            log.write("Executing 'DELETE User from database' \n")
+                            println("User Deleted")
+                            val resultSet5 = statement.executeQuery("SELECT * FROM userAccount")
+                            log.write("Executing 'SELECT * FROM userAccount';\n")
+                            adminMenu()
+
+
                         }else if (choice2 == 2) {
                             println(" choice 2.")
-                            deleteUser()
-                        
-                        }else if (choice2 == 3) {
-                            println(" choice 3.")
                             exitProgram()
                         
-                        }else if (( choice != 1 || choice != 2 || choice != 3)) {
+                        }else if (( choice != 1 || choice != 2 )) {
                             println(" Not a valid choice, please try again!!!")
-                            adminMenu()
+                            deleteUser()
                         
                         }
                     }
@@ -401,15 +419,17 @@ object Project_1_Sharks {
                             .format("csv")
                             .option("inferSchema", "true")
                             .option("header", "true")
-                            .load("input/global-shark-attack.csv")
-                        output.limit(25).show() // will print out the first 25 lines
+                            .load("input/GSAF5 (1_2).csv")
+                            //.load("input/global-shark-attack.csv")
+                            
+                        output.limit(20).show() // will print out the first 20 lines
 
 
                         // This code will create a temp view of the dataset you used and load the data into a permanent table
                         // inside of Hadoop. this will persist the data and only require this code to run once.
                         // After initialization this code will and creation of output will not me necessary
                         output.createOrReplaceTempView("temp_data")
-                        hiveCtx.sql("CREATE TABLE IF NOT EXISTS shark1 (caseNumber STRING, date STRING, year INT, type STRING, country STRING, area STRING, location STRING, activity STRING, name STRING, sex STRING, age INT, injury STRING, fatal STRING, time STRING, species STRING, investigator_or_source STRING, pdf STRING, href_formula STRING, href_STRING, case_number1 STRING, case_number STRING, original_order INT)")
+                        hiveCtx.sql("CREATE TABLE IF NOT EXISTS shark1 (caseNumber STRING, date STRING, year INT, type STRING, country STRING, area STRING, location STRING, activity STRING, name STRING, sex STRING, age INT, injury STRING, fatal STRING, time STRING, species STRING, investigator_or_source STRING, pdf STRING, href_formula STRING, href_ STRING, case_number1 STRING, case_number STRING, original_order INT)")
                         hiveCtx.sql("INSERT INTO shark1 SELECT * FROM temp_data")
 
 
@@ -423,44 +443,50 @@ object Project_1_Sharks {
 
                     def totalSharkAttacks(){
                         println("Total number of attacks recorded")
-                        val result = hiveCtx.sql("SELECT COUNT(year) FROM shark1 WHERE year > 999;")
+                        val result = hiveCtx.sql("SELECT COUNT(year) FROM shark1 WHERE year > 1900")
                         result.show()
                         result.write.csv("results/totalSharkAttacks")
+                        log.write("Executing 'SELECT COUNT(year) FROM shark1 WHERE year > 1900';\n")
                     }
                     
                     def sharkResponsible(){
                         println("most attacks")
-                        val result = hiveCtx.sql("SELECT (species) FROM shark1 GROUP BY species ORDER BY COUNT(*) DESC;")
+                        val result = hiveCtx.sql("SELECT (species) FROM shark1 GROUP BY species ORDER BY COUNT(*) DESC")
                         result.show()
                         result.write.csv("results/totalSharkAttacks")
+                        log.write("Executing 'SELECT (species) FROM shark1 GROUP BY species ORDER BY COUNT(*) DESC';\n")
                     }
 
                     def locationMostSharkAttacks(){
                         println("most attacks")
-                        val result = hiveCtx.sql("SELECT (area) FROM shark1 GROUP BY area ORDER BY COUNT(*) DESC;")
+                        val result = hiveCtx.sql("SELECT (area) FROM shark1 GROUP BY area ORDER BY COUNT(*) DESC")
                         result.show()
                         result.write.csv("results/totalSharkAttacks")
+                        log.write("Executing 'SELECT (area) FROM shark1 GROUP BY area ORDER BY COUNT(*) DESC';\n")
                     }
 
                     def timeOfDaySharkAttack(){
                         println("most attacks")
-                        val result = hiveCtx.sql("SELECT COUNT(year) FROM shark1 WHERE year > 999;")
+                        val result = hiveCtx.sql("SELECT COUNT(year) FROM shark1 WHERE year > 999") // STILL NEED TO FIGURE OUT THIS QUERY
                         result.show()
                         result.write.csv("results/totalSharkAttacks")
+                        //?log.write("Executing 'NEED TO ADD LOG HERE');\n")
                     }
 
                     def provokedUnprovokedAttacks(){
                         println("most attacks")
-                        val result = hiveCtx.sql("SELECT COUNT(year) FROM shark1 WHERE year > 999;")
+                        val result = hiveCtx.sql("SELECT typeAttack, Count(typeAttack) AS whichTypeMost FROM shark1 GROUP BY typeAttack ORDER BY whichTypeMost")
                         result.show()
                         result.write.csv("results/totalSharkAttacks")
+                        log.write("Executing 'SELECT typeAttack, Count(typeAttack) AS whichTypeMost FROM shark1 GROUP BY typeAttack ORDER BY whichTypeMost';\n")
                     }
 
                     def ageRangePeopleAttacked(){
-                        println("most attacks")
-                        val result = hiveCtx.sql("SELECT COUNT(year) FROM shark1 WHERE year > 999;")
+                        println("Average Age OF Both Males & Female Attacked")
+                        val result = hiveCtx.sql("SELECT sex, AVG(age) AS averageAgeAttacked FROM shark1 GROUP BY sex")
                         result.show()
-                        result.write.csv("results/totalSharkAttacks")
+                        result.write.csv("results/avgAgePeopleAttacked")
+                        log.write("Executing 'SELECT sex, AVG(age) AS averageAgeAttacked FROM shark1 GROUP BY sex';\n")
                     }
 
 
@@ -469,14 +495,14 @@ object Project_1_Sharks {
             
 
             
-            val resultSet1 = statement.executeQuery("SELECT * FROM Sharks")
-            log.write("Executing 'SELECT * FROM Sharks' ;\n")
-            while ( resultSet1.next() ) {
-                print(resultSet1.getString(1) + " " + resultSet1.getString(2) + " " + resultSet1.getString(3) + " " + resultSet1.getString(4) + " " + resultSet1.getString(5) + " " + resultSet1.getString(6) + " " + resultSet1.getString(7))
-                println("")
-                println("")
+            // val resultSet1 = statement.executeQuery("SELECT * FROM Sharks")
+            // log.write("Executing 'SELECT * FROM Sharks' ;\n")
+            // while ( resultSet1.next() ) {
+            //     print(resultSet1.getString(1) + " " + resultSet1.getString(2) + " " + resultSet1.getString(3) + " " + resultSet1.getString(4) + " " + resultSet1.getString(5) + " " + resultSet1.getString(6) + " " + resultSet1.getString(7))
+            //     println("")
+            //     println("")
                 
-            }
+            // }
 
                 
             }catch {
@@ -489,15 +515,6 @@ object Project_1_Sharks {
             log.close()
 
 
-
-
-
-
-
     }
   
-
-
-
-
 }
