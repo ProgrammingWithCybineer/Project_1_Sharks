@@ -62,7 +62,7 @@ object Project_1_Sharks {
         val url = "jdbc:mysql://localhost:3306/Project_1_Sharks"
         val username = "root"
         //? DON'T FORGET TO DELETE PASSWORD BEFORE PUSHING TO GITHUB
-        val password = "#################" // Update to include your password
+        val password = "########" // Update to include your password
         var connection:Connection = null 
         //val statement = connection.createStatement()
         
@@ -207,41 +207,46 @@ object Project_1_Sharks {
                     def userMenu(){
                         println(" What type of data would you like to view. Please select below: ")
                         println("")
-                        println(" (1) Where do the most shark attacks happen?")
+                        println(" (1) What is the total number of shark attacks recorded?")
                         println("")
                         println(" (2) What shark is responsible for the most shark attacks?")
                         println("")
-                        println(" (3) Do male sharks attack more than female sharks?")
+                        println(" (3) Where do the most shark attacks happen?")
                         println("")
                         println(" (4) What time of day do most shark attacks happen?")
                         println("")
-                        println(" (5) Do sharks attacks follow shark migration patterns?")
+                        println(" (5) Are most shark attacks provoked or unprovoked?")
                         println("")
-                        println(" (6) What is the age range of the sharks that cause the most shark attacks?")
+                        println(" (6) What is the age range of people attacked by sharks?")
                         println("")
                         println(" (0) To exit the program")
                         println("")
                         var choice2 =  (scanner.nextInt())
                         (scanner.nextLine()) 
                         if (choice2 == 1){
-                            println(" Where do the most shark attacks happen?")
-                            mostSharkAttacks()
+                            println(" What is the total number of shark attacks recorded?")
+                            totalSharkAttacks()
 
                             
                         }else if (choice2 == 2) {
-                            println(" choice 2.")
+                            println(" What shark is responsible for the most shark attacks?")
+                            sharkResponsible()
                             
                         }else if (choice2 == 3) {
-                            println(" choice 3.")
+                            println(" Where do the most shark attacks happen?")
+                            locationMostSharkAttacks()
                             
                         }else if (choice2 == 4) {
-                            println(" choice 4.")
+                            println(" What time of day do most shark attacks happen?")
+                            timeOfDaySharkAttack()
                             
                         }else if (choice2 == 5) {
-                            println(" choice 5.")
+                            println(" Are most shark attacks provoked or unprovoked?")
+                            provokedUnprovokedAttacks()
                             
                         }else if (choice2 == 6) {
-                            println(" choice 6.")
+                            println(" What is the age range of people attacked by sharks?")
+                            ageRangePeopleAttacked()
 
                         }else if (choice2 == 0) {
                             exitProgram()
@@ -404,7 +409,7 @@ object Project_1_Sharks {
                         // inside of Hadoop. this will persist the data and only require this code to run once.
                         // After initialization this code will and creation of output will not me necessary
                         output.createOrReplaceTempView("temp_data")
-                        hiveCtx.sql("CREATE TABLE IF NOT EXISTS shark1 (caseNumber STRING, date STRING, year STRING, type STRING, country STRING, area STRING, location STRING, activity STRING, name STRING, sex STRING, age INT, injury STRING, fatal STRING, time STRING, species STRING, investigator_or_source STRING, pdf STRING, href_formula STRING, href_STRING, case_number1 STRING, case_number STRING, original_order INT)")
+                        hiveCtx.sql("CREATE TABLE IF NOT EXISTS shark1 (caseNumber STRING, date STRING, year INT, type STRING, country STRING, area STRING, location STRING, activity STRING, name STRING, sex STRING, age INT, injury STRING, fatal STRING, time STRING, species STRING, investigator_or_source STRING, pdf STRING, href_formula STRING, href_STRING, case_number1 STRING, case_number STRING, original_order INT)")
                         hiveCtx.sql("INSERT INTO shark1 SELECT * FROM temp_data")
 
 
@@ -416,9 +421,46 @@ object Project_1_Sharks {
 
 
 
-                       def mostSharkAttacks(){
-                           println("most attacks")
-                       //val mostAttacks = hiveCtx.sql("") 
+                    def totalSharkAttacks(){
+                        println("Total number of attacks recorded")
+                        val result = hiveCtx.sql("SELECT COUNT(year) FROM shark1 WHERE year > 999;")
+                        result.show()
+                        result.write.csv("results/totalSharkAttacks")
+                    }
+                    
+                    def sharkResponsible(){
+                        println("most attacks")
+                        val result = hiveCtx.sql("SELECT (species) FROM shark1 GROUP BY species ORDER BY COUNT(*) DESC;")
+                        result.show()
+                        result.write.csv("results/totalSharkAttacks")
+                    }
+
+                    def locationMostSharkAttacks(){
+                        println("most attacks")
+                        val result = hiveCtx.sql("SELECT (area) FROM shark1 GROUP BY area ORDER BY COUNT(*) DESC;")
+                        result.show()
+                        result.write.csv("results/totalSharkAttacks")
+                    }
+
+                    def timeOfDaySharkAttack(){
+                        println("most attacks")
+                        val result = hiveCtx.sql("SELECT COUNT(year) FROM shark1 WHERE year > 999;")
+                        result.show()
+                        result.write.csv("results/totalSharkAttacks")
+                    }
+
+                    def provokedUnprovokedAttacks(){
+                        println("most attacks")
+                        val result = hiveCtx.sql("SELECT COUNT(year) FROM shark1 WHERE year > 999;")
+                        result.show()
+                        result.write.csv("results/totalSharkAttacks")
+                    }
+
+                    def ageRangePeopleAttacked(){
+                        println("most attacks")
+                        val result = hiveCtx.sql("SELECT COUNT(year) FROM shark1 WHERE year > 999;")
+                        result.show()
+                        result.write.csv("results/totalSharkAttacks")
                     }
 
 
@@ -434,21 +476,6 @@ object Project_1_Sharks {
                 println("")
                 println("")
                 
-            }
-
-            // Query to delete database entry where play age is less then 5
-            println("")
-            println("")
-            println("")
-            // this is for the total number of people who ended the game with health above 2
-            //val resultSet8 =  statement.executeUpdate("DELETE FROM Players WHERE age < 4 ;")
-            //log.write("Executing 'DELETE FROM Players WHERE age < 2' \n")
-            val resultSet9 = statement.executeQuery("SELECT * FROM Sharks")
-            log.write("Executing  'SELECT * FROM Sharks' ;\n")
-            while ( resultSet9.next() ) {
-                 print(resultSet9.getString(1) + " " + resultSet9.getString(2) + " " + resultSet9.getString(3) + " " + resultSet9.getString(4) + " " + resultSet9.getString(5) + " " + resultSet9.getString(6) + " " + resultSet9.getString(7))
-                 println("")
-                 println("")
             }
 
                 
