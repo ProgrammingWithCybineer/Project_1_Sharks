@@ -62,7 +62,7 @@ object Project_1_Sharks {
         val url = "jdbc:mysql://localhost:3306/Project_1_Sharks"
         val username = "root"
         //? DON'T FORGET TO DELETE PASSWORD BEFORE PUSHING TO GITHUB
-        val password = "ProgramWithNoFears920" // Update to include your password
+        val password = "######################" // Update to include your password
         var connection:Connection = null 
         //val statement = connection.createStatement()
         
