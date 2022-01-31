@@ -1,7 +1,7 @@
 # Project_1_Sharks
 
 This is a shark attack database.  Having User and Admin menu. 
-The program connects to HIVE and mySql.
+The program connects to HIVE and mySQL.
 
 Tech Stacks Used:
 
