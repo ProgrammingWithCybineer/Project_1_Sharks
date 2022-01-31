@@ -62,7 +62,7 @@ object Project_1_Sharks {
         val url = "jdbc:mysql://localhost:3306/Project_1_Sharks"
         val username = "root"
         //? DON'T FORGET TO DELETE PASSWORD BEFORE PUSHING TO GITHUB
-        val password = "#####################" // Update to include your password
+        val password = "ProgramWithNoFears920" // Update to include your password
         var connection:Connection = null 
         //val statement = connection.createStatement()
         
@@ -102,20 +102,20 @@ object Project_1_Sharks {
                   
                 // Application loop
                 while (shark){
-                    
+                    mainMenu()
 
                     
-                    //def mainMenu(){
-                    println("###################################")
-                    println("Please choose from the menu below: ")
-                    println("(1) Create Account ")
-                    println("(2) User Log In ")
-                    println("(3) Admin Log In ")
-                    println("(0) Quit Program")
-                    println("###################################")
-                    var choice= (scanner.nextInt())
-                    scanner.nextLine()
-                    //}  
+                    def mainMenu(){
+                        println("###################################")
+                        println("Please choose from the menu below: ")
+                        println("(1) Create Account ")
+                        println("(2) User Log In ")
+                        println("(3) Admin Log In ")
+                        println("(0) Quit Program")
+                        println("###################################")
+                        var choice= (scanner.nextInt())
+                        scanner.nextLine()
+                      
 
                         if (choice == 1){
                             createAccount()
@@ -134,7 +134,7 @@ object Project_1_Sharks {
                             //mainMenu()
                         }
                                 
-                    
+                    }
                         
                     // Create User Account    
                     def createAccount(): Unit = {
@@ -259,10 +259,14 @@ object Project_1_Sharks {
                             userMenu()
                         
 
+                        }else if (choice2 == 7) {
+                        println(" Return To Log In Screen?")
+                        mainMenu()
+
                         }else if (choice2 == 0) {
                             exitProgram()
                             
-                        }else if (( choice != 0 || choice != 1 || choice != 2 || choice != 3 || choice != 4 || choice != 5|| choice != 6)) {
+                        }else if (( choice != 0 || choice != 1 || choice != 2 || choice != 3 || choice != 4 || choice != 5|| choice != 6 || choice != 7)) {
                             println(" Not a valid choice, please try again!!!")
                             userMenu()
                             
@@ -331,9 +335,14 @@ object Project_1_Sharks {
                     def updateDataset(){
                         println("")
                         println(" Please choose from below ")
+                        println("############################")
                         println(" (1) Update Data")
+                        println("")
                         println(" (2) Return to Admin Menu ")
+                        println("")
                         println(" (3) Exit program ")
+                        println("#############################")
+                        println("")
                         
                         var choice2 =  (scanner.nextInt())
                         (scanner.nextLine()) 
@@ -404,7 +413,7 @@ object Project_1_Sharks {
                         println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~*~~~~~~~~~~~*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*~~~~~*~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
                         println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
                         println("                             THANK YOU FOR VISITING THE SHARK ATTACK DATABASE                            ")
-                        println("                                       DO STAY SAFE IN OUR OCEANS                                        ")
+                        println("                                       DO STAY SAFE IN THEIR OCEANS                                      ")
                         println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
                         println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
                         println("")        
@@ -442,7 +451,7 @@ object Project_1_Sharks {
 
 
                     def totalSharkAttacks(){
-                        println("Total number of attacks recorded")
+                        println("Total number of attacks recorded...")
                         val result = hiveCtx.sql("SELECT COUNT(year) FROM shark1 WHERE year > 1900")
                         result.show()
                         result.write.csv("results/totalSharkAttacks")
@@ -450,61 +459,62 @@ object Project_1_Sharks {
                     }
                     
                     def sharkResponsible(){
-                        println("most attacks")
-                        val result = hiveCtx.sql("SELECT (species) FROM shark1 GROUP BY species ORDER BY COUNT(*) DESC")
+                        println("What is responsible for the most attacks...")
+                        val result = hiveCtx.sql("SELECT (species) FROM shark1 WHERE species IS NOT NULL GROUP BY species ORDER BY COUNT(*) DESC")
                         result.show()
-                        result.write.csv("results/totalSharkAttacks")
+                        result.write.csv("results/sharkResponsible")
                         log.write("Executing 'SELECT (species) FROM shark1 GROUP BY species ORDER BY COUNT(*) DESC';\n")
                     }
 
                     def locationMostSharkAttacks(){
-                        println("most attacks")
-                        val result = hiveCtx.sql("SELECT (area) FROM shark1 GROUP BY area ORDER BY COUNT(*) DESC")
+                        println("Location of Most Shark Attack...")
+                        val result = hiveCtx.sql("SELECT (country) FROM shark1 WHERE country IS NOT NULL GROUP BY country ORDER BY COUNT(*) DESC")
                         result.show()
-                        result.write.csv("results/totalSharkAttacks")
-                        log.write("Executing 'SELECT (area) FROM shark1 GROUP BY area ORDER BY COUNT(*) DESC';\n")
+                        result.write.csv("results/locationMostSharkAttacks")
+                        log.write("Executing 'SELECT (country) FROM shark1 WHERE country IS NOT NULL GROUP BY country ORDER BY COUNT(*) DESC';\n")
                     }
 
+                     // STILL NEED TO FIGURE OUT THIS QUERY
                     def timeOfDaySharkAttack(){
-                        println("most attacks")
-                        val result = hiveCtx.sql("SELECT COUNT(year) FROM shark1 WHERE year > 999") // STILL NEED TO FIGURE OUT THIS QUERY
-                        result.show()
-                        result.write.csv("results/totalSharkAttacks")
+                        println("Time most shark attacks occur...")
+                        //val result = hiveCtx.sql("SELECT COUNT(year) FROM shark1 WHERE year > 999") // STILL NEED TO FIGURE OUT THIS QUERY
+                        val result1 = hiveCtx.sql("CREATE VIEW AvgTimeOfAttacked AS SELECT time, CONVERT(SUBSTRING(time,1,2), UNSIGNED INTEGER) AS timeConvert FROM shark1")
+                        val result2 = hiveCtx.sql("SELECT AVG(timeConvert) FROM AvgTimeOfAttacked WHERE timeConvert IS NOT NULL")
+                        //result.show()
+                        //result.write.csv("results/timeOfDaySharkAttack")
+                        result2.show()
+                        result2.write.csv("results/timeOfDaySharkAttack")
                         //?log.write("Executing 'NEED TO ADD LOG HERE');\n")
                     }
 
                     def provokedUnprovokedAttacks(){
-                        println("most attacks")
-                        val result = hiveCtx.sql("SELECT typeAttack, Count(typeAttack) AS whichTypeMost FROM shark1 GROUP BY typeAttack ORDER BY whichTypeMost")
+                        println("Number of Provoked and Unprovoked Attacks")
+                        val result = hiveCtx.sql("SELECT type, Count(type) AS whichTypeMost FROM shark1 WHERE type IS NOT NULL GROUP BY type ORDER BY whichTypeMost")
                         result.show()
-                        result.write.csv("results/totalSharkAttacks")
+                        result.write.csv("results/provokedUnprovokedAttacks")
                         log.write("Executing 'SELECT typeAttack, Count(typeAttack) AS whichTypeMost FROM shark1 GROUP BY typeAttack ORDER BY whichTypeMost';\n")
                     }
 
                     def ageRangePeopleAttacked(){
                         println("Average Age OF Both Males & Female Attacked")
-                        val result = hiveCtx.sql("SELECT sex, AVG(age) AS averageAgeAttacked FROM shark1 GROUP BY sex")
+                        val result = hiveCtx.sql("SELECT sex, AVG(age) AS averageAgeAttacked FROM shark1 WHERE age IS NOT NULL AND sex IS NOT NULL GROUP BY sex")
                         result.show()
                         result.write.csv("results/avgAgePeopleAttacked")
+                        //result.write.mode(SaveMode.Overwrite).csv("results/avgAgePeopleAttacked")
                         log.write("Executing 'SELECT sex, AVG(age) AS averageAgeAttacked FROM shark1 GROUP BY sex';\n")
                     }
 
 
                             
                 }
+
+                //? to overwrite csv file if already exist result.write.mode(SaveMode.Overwrite).csv("filename")
+                //? take first 2 digits of time as int then use that to find time of day
+
             
 
             
-            // val resultSet1 = statement.executeQuery("SELECT * FROM Sharks")
-            // log.write("Executing 'SELECT * FROM Sharks' ;\n")
-            // while ( resultSet1.next() ) {
-            //     print(resultSet1.getString(1) + " " + resultSet1.getString(2) + " " + resultSet1.getString(3) + " " + resultSet1.getString(4) + " " + resultSet1.getString(5) + " " + resultSet1.getString(6) + " " + resultSet1.getString(7))
-            //     println("")
-            //     println("")
-                
-            // }
-
-                
+                            
             }catch {
                      case e: Exception => e.printStackTrace            
 
