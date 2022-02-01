@@ -62,7 +62,7 @@ object Project_1_Sharks {
         val url = "jdbc:mysql://localhost:3306/Project_1_Sharks"
         val username = "root"
         //? DON'T FORGET TO DELETE PASSWORD BEFORE PUSHING TO GITHUB
-        val password = "######################" // Update to include your password
+        val password = "ProgramWithNoFears920" // Update to include your password
         var connection:Connection = null 
         //val statement = connection.createStatement()
         
@@ -438,13 +438,19 @@ object Project_1_Sharks {
                         // inside of Hadoop. this will persist the data and only require this code to run once.
                         // After initialization this code will and creation of output will not me necessary
                         output.createOrReplaceTempView("temp_data")
+                        hiveCtx.sql("SET hive.exec.dynamic.partition.mode=nonstrict")
+                        hiveCtx.sql("SET hive.enforce.bucketing=false")
+                        hiveCtx.sql("SET hive.enforce.sorting=false")
+                        //hiveCtx.sql("USE project1_hive_scala")
                         hiveCtx.sql("CREATE TABLE IF NOT EXISTS shark1 (caseNumber STRING, date STRING, year INT, type STRING, country STRING, area STRING, location STRING, activity STRING, name STRING, sex STRING, age INT, injury STRING, fatal STRING, time STRING, species STRING, investigator_or_source STRING, pdf STRING, href_formula STRING, href_ STRING, case_number1 STRING, case_number STRING, original_order INT)")
                         hiveCtx.sql("INSERT INTO shark1 SELECT * FROM temp_data")
-
-
-                        //?Copy line 400 and put here for partitioning
-                        //?INSERT INTO new_table SELECT cast(old_string_col AS DATE) FROM old_table got column that contain date
-
+                        //?val sharkTable = hiveCtx.sql("SELECT * FROM shark1 limit 10")
+                        //?sharkTable.show()
+                        //hiveCtx.sql("CREATE TABLE IF NOT EXISTS shark1Partitioned (caseNumber STRING, date STRING, year INT, type STRING, country STRING, area STRING, location STRING, activity STRING, name STRING, sex STRING, age INT, injury STRING, fatal STRING, time STRING, investigator_or_source STRING, pdf STRING, href_formula STRING, href_ STRING, case_number1 STRING, case_number STRING, original_order INT) PARTITIONED BY  (species STRING) row format delimited fields terminated by '\u003B'")
+                        //hiveCtx.sql("INSERT INTO shark1Partitioned SELECT caseNumber STRING, date STRING, year INT, type STRING, country STRING, area STRING, location STRING, activity STRING, name STRING, sex STRING, age INT, injury STRING, fatal STRING, time STRING, investigator_or_source STRING, pdf STRING, href_formula STRING, href_ STRING, case_number1 STRING, case_number STRING, original_order INT, species STRING FROM shark1")
+                        //val part = hiveCtx.sql("SELECT * FROM shark1Partitioned limit 10")
+                        //part.show()
+                        
                     }
 
 
@@ -458,6 +464,7 @@ object Project_1_Sharks {
                         log.write("Executing 'SELECT COUNT(year) FROM shark1 WHERE year > 1900';\n")
                     }
                     
+
                     def sharkResponsible(){
                         println("What is responsible for the most attacks...")
                         val result = hiveCtx.sql("SELECT (species) FROM shark1 WHERE species IS NOT NULL GROUP BY species ORDER BY COUNT(*) DESC")
