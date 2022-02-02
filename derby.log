@@ -1,8 +1,8 @@
 ----------------------------------------------------------------
-Tue Feb 01 17:48:41 EST 2022:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-017e-b779-d201-00003090db60 
-on database directory C:\Users\Cybineer\Desktop\Project_1_Sharks\metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@194ea3e0 
-Loaded from file:/C:/Users/Cybineer/Desktop/Project_1_Sharks/target/bg-jobs/sbt_71b4f2f3/target/13faa1ce/d4f190b2/derby-10.12.1.1.jar
+Wed Feb 02 17:26:56 EST 2022:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-017e-bc8c-4647-00002b09f640 
+on database directory C:\Users\Cybineer\Desktop\Project_1_Sharks\metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@16c99b5 
+Loaded from file:/C:/Users/Cybineer/Desktop/Project_1_Sharks/target/bg-jobs/sbt_6c1ea889/target/13faa1ce/d4f190b2/derby-10.12.1.1.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_321-b07
 user.dir=C:\Users\Cybineer\Desktop\Project_1_Sharks

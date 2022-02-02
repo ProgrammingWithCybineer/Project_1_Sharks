@@ -1,2 +1,0 @@
-Executing 'SELECT COUNT(*) FROM userAccount WHERE userName='test1' AND userPassword='test123');
-Executing 'SELECT (country) FROM shark1 WHERE country IS NOT NULL GROUP BY country ORDER BY COUNT(*) DESC';
