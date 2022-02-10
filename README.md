@@ -15,11 +15,12 @@ Technologies Used
 
 
 
-Features
+Features:
 Current Features
-•	User can update user name and password
-•	Admin can delete user from database
+- User can update user name and password
+- Admin can delete user from database
+
 
 Future Features
-•	Create a GUI for better user interaction
-•	Allow automatic update of the latest shark attack data.
+- Create a GUI for better user interaction
+- Allow automatic update of the latest shark attack data.
