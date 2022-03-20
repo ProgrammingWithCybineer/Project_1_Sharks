@@ -6,9 +6,9 @@ This program has CRUD functionality. The program also connects to hive and MySQL
 
 
 Technologies Used
-- Apache hive 3.1.2
-- Spark 3.1.2
 - Scala  2.11.12
+- Spark 3.1.2
+- Apache hive 3.1.2
 - SQL  8.0.19
 - SBT 1.5.4
 - VS Code
