@@ -5,7 +5,7 @@ This program has CRUD functionality. The program also connects to hive and MySQL
 
 
 
-#### Technologies Used
+### Technologies Used
 - Scala  2.11.12
 - Spark 3.1.2
 - Apache hive 3.1.2
@@ -15,11 +15,11 @@ This program has CRUD functionality. The program also connects to hive and MySQL
 
 
 
-####Current Features
+### Current Features
 - User can update user name and password
 - Admin can delete user from database
 
 
-#### Future Features
+### Future Features
 - Create a GUI for better user interaction
 - Allow automatic update of the latest shark attack data.
