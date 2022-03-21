@@ -15,8 +15,7 @@ This program has CRUD functionality. The program also connects to hive and MySQL
 
 
 
-#### Features:
-Current Features
+####Current Features
 - User can update user name and password
 - Admin can delete user from database
 
