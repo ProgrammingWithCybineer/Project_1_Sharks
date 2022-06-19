@@ -1,4 +1,4 @@
-# Project_1_Sharks
+# Shark Attack Database Analysis – (Scala)
 
 This is a CLI program that will analyze shark attack data using Scala, Hadoop, Spark, Hive, and MySQL. 
 This program has CRUD functionality. The program also connects to hive and MySQL.
